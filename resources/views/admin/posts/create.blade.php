@@ -1,0 +1,33 @@
+@extends('layouts.app')
+
+@section('content')
+    
+    <div class="container">
+        <h1>Crea nuovo Post:</h1>
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        {{-- form --}}
+        <form action="{{route('admin.posts.store')}}" method="post">
+            @csrf
+            @method('POST')
+            <div class="form-group">
+              <label for="title">Titolo:</label>
+              <input type="text" class="form-control" id="title" name="title" value='{{ old('title')}}' >
+            </div>
+            <div class="form-group">
+                <label for="content">Contenuto:</label>
+                <textarea  class="form-control" id="content" name="content"cols="30" rows="10" value='{{ old('content')}}'></textarea>
+            </div>
+            <input type="submit" class="btn btn-success" value="Crea Post"> 
+          </form>
+        {{-- END FORM --}}
+    </div>
+
+@endsection

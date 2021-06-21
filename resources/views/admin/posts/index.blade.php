@@ -11,7 +11,14 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">{{ $post->title }}</h5>
-                            <a href="#" class="btn btn-primary">Vai al post</a>
+                            <a href="{{route('admin.posts.show', ['post'=> $post->id])}}" class="btn btn-primary">Vai al post</a>
+                            <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}" class="btn btn-success">Modifica Post</a>
+                            <form action="{{route('admin.posts.destroy', ['post'=> $post->id])}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                
+                                <input type="submit" class="btn btn-danger" value="Elimina Post">
+                            </form>
                         </div>
                     </div>
                 </div>
