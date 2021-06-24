@@ -40,6 +40,22 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <h5>Tags:</h5>
+
+                @foreach ($tags as $tag)
+                    <div class="custom-control custom-checkbox">
+                        @if ($errors->any())
+                            <input type="checkbox" name='tags[]' class="custom-control-input" value="{{$tag->id}}" id="tag-{{$tag->id}}" {{ in_array($tag->id, old('tags',)) ? 'checked' : '' }}>        
+                        @else
+                            <input type="checkbox" name='tags[]' class="custom-control-input" value="{{$tag->id}}" id="tag-{{$tag->id}}" {{ $post->tags->contains($tag->id) ? 'checked' : '' }}>   
+                        @endif                    
+                    
+                        <label class="custom-control-label" for="tag-{{$tag->id}}">{{$tag->name}}</label>
+                    </div>
+                @endforeach
+            </div>
+
             <input type="submit" class="btn btn-primary" value="Salva">
         </form>
     </div>

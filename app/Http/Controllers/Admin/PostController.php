@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 use Illuminate\Support\Str;
 use App\Category;
 
@@ -34,9 +35,12 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
+        $tags= Tag::all();
 
         $data = [
-            'categories' => $categories
+            'categories' => $categories,
+            'tags'=>$tags
+
         ];
 
         return view('admin.posts.create', $data);
@@ -53,7 +57,8 @@ class PostController extends Controller
         $request->validate([
             'title'=> 'required|max:255',
             'content'=>'required|max:65000',
-            'category_id' => 'nullable|exists:categories,id'
+            'category_id' => 'nullable|exists:categories,id',
+            'tags'=> 'nullable|exists:tags,id'
         ]);
 
 
@@ -77,6 +82,11 @@ class PostController extends Controller
         $new_post->fill( $new_post_data);
         $new_post->save();
 
+        // TAGS:
+        if (isset($new_post_data['tags']) && is_array($new_post_data['tags'])){
+            $new_post->tags()->sync($new_post_data['tags']);
+        }
+
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
         
     }
@@ -94,7 +104,8 @@ class PostController extends Controller
         $data = [
 
             'post'=>$post,
-            'post_category'=> $post->category
+            'post_category'=> $post->category,
+            'post_tags'=> $post->tags
         ];
 
         return view('admin.posts.show', $data);
@@ -110,10 +121,12 @@ class PostController extends Controller
     {
         $this_post = Post::findOrFail($id);
         $categories = Category::all();
+        $tags = Tag::all();
 
         $data = [
             'post' => $this_post,
-            'categories' => $categories
+            'categories' => $categories,
+            'tags'=>$tags
         ];
 
         return view('admin.posts.edit', $data);
@@ -130,7 +143,8 @@ class PostController extends Controller
     {
         $request->validate([
             'title'=> 'required|max:255',
-            'content'=>'required|max:65000'
+            'content'=>'required|max:65000',
+            'tags' => 'nullable|exists:tags,id'
         ]);
 
         $mod_post_data = $request->all();
@@ -159,6 +173,16 @@ class PostController extends Controller
 
         
         $post->update($mod_post_data);
+
+        // tags
+        if(isset($mod_post_data['tags']) && is_array($mod_post_data['tags'])){
+            
+            $post->tags()->sync($mod_post_data['tags']);
+        }else{
+            $post->tags()->sync([]);
+        }
+
+
 
         return redirect()->route('admin.posts.show', ['post' => $post->id]);
     }
