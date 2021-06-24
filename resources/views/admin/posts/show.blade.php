@@ -2,15 +2,16 @@
 
 @section('content')
     
-    <div class="container">
-        <h1>{{$post->title}}</h1>
+<div class="container">
+    @if($post_category)
+    <h4>Categoria: {{ $post_category->name }}</h4>
+    @endif
+    
+    <h1>{{ ucfirst( $post->title ) }}</h1>
 
-        <p class="mt-2 mb-2"><strong>Slug:</strong> {{$post->slug}}</p>
+    <div> <strong>Slug:</strong> {{ $post->slug }}</div>
 
-        <p>{{$post->content}}</p>
-
-        <a href="{{route('admin.posts.edit', ['post'=> $post->id])}}" class="btn btn-success">Modifica Post</a>
-
-    </div>
+    <p>{{ $post->content }}</p>
+</div>
 
 @endsection

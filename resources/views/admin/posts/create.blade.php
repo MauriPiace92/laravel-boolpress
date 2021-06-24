@@ -25,6 +25,17 @@
                 <label for="content">Contenuto:</label>
                 <textarea  class="form-control" id="content" name="content"cols="30" rows="10" value='{{ old('content')}}'></textarea>
             </div>
+
+            <div class="form-group">
+                <label for="category_id">Categoria</label>
+                <select class="form-control" name="category_id" id="category_id">
+                    <option value="">nessuna</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{old('category_id') == $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            
             <input type="submit" class="btn btn-success" value="Crea Post"> 
           </form>
         {{-- END FORM --}}

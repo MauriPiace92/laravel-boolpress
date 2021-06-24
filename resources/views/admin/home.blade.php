@@ -16,7 +16,19 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <div>
+                        
+                        <h3>Benvenuto {{$current_user->name}}</h3>
+
+                        @if($current_user_info)
+                        <ul>
+                            <li>Il tuo indirizzo: {{ $current_user_info->full_address }}</li>
+                            <li>Numero di telefono: {{$current_user_info->telephone}} </li>
+
+                        </ul>
+                        @endif
+
+                    </div>
                 </div>
             </div>
         </div>
