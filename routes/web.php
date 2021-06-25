@@ -20,6 +20,9 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/blog','PostController@index')->name('blog');
 Route::get('/blog/{slug}','PostController@show')->name('blog-page');
 
+//Post visualizzati con Vue
+Route::get('/vue-posts','PostController@vuePosts')->name('vue-posts');
+
 
 
 //gestione privata:
