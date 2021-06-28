@@ -15,7 +15,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.posts.update', [ 'post' => $post->id]) }}" method="post">
+        <form action="{{ route('admin.posts.update', [ 'post' => $post->id]) }}" enctype="multipart/form-data" method="post">
             @csrf
 
             @method('PUT')
@@ -54,6 +54,11 @@
                         <label class="custom-control-label" for="tag-{{$tag->id}}">{{$tag->name}}</label>
                     </div>
                 @endforeach
+            </div>
+
+            <div class="custom-file mt-2 mb-4">
+                <input type="file" class="custom-file-input" name='cover-img' id="cover-img">
+                <label class="custom-file-label" for="cover-img">Immagine di Copertna</label>
             </div>
 
             <input type="submit" class="btn btn-primary" value="Salva">

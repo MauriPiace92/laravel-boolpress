@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewPostAdminNotification;
 use App\Post;
 use App\Tag;
 use App\Category;
@@ -59,7 +61,8 @@ class PostController extends Controller
             'title'=> 'required|max:255',
             'content'=>'required|max:65000',
             'category_id' => 'nullable|exists:categories,id',
-            'tags'=> 'nullable|exists:tags,id'
+            'tags'=> 'nullable|exists:tags,id',
+            'cover'=>'nullable|image:10000'
         ]);
 
 
@@ -99,6 +102,8 @@ class PostController extends Controller
             $new_post->tags()->sync($new_post_data['tags']);
         }
 
+        // Invio la mail all'amministratore per il nuovo post:
+        Mail::to('mail@mail.it')->send(new NewPostAdminNotification());
 
 
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
@@ -158,7 +163,8 @@ class PostController extends Controller
         $request->validate([
             'title'=> 'required|max:255',
             'content'=>'required|max:65000',
-            'tags' => 'nullable|exists:tags,id'
+            'tags' => 'nullable|exists:tags,id',
+            'cover'=>'nullable|image:10000'
         ]);
 
         $mod_post_data = $request->all();
@@ -185,6 +191,14 @@ class PostController extends Controller
 
         }
 
+        if(isset($mod_post_data['cover-img'])){
+            $img_path= Storage::put('posts-cover', $mod_post_data['cover-img']);  
+
+            if($img_path){
+                $mod_post_data['cover']= $img_path;
+            }
+        }
+    
         
         $post->update($mod_post_data);
 
@@ -210,6 +224,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
+        $post->tags()->sync([]);
         $post->delete();
 
         return redirect()->route('admin.posts.index');
