@@ -85,7 +85,7 @@ class PostController extends Controller
             $new_img_path=Storage::put('posts-cover', $new_post_data['cover-img']);
 
             if($new_img_path){
-                $new_post_data['cover-img']= $new_img_path;
+                $new_post_data['cover']= $new_img_path;
             }
 
         }
