@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Post;
 use App\Tag;
-use Illuminate\Support\Str;
 use App\Category;
 
 class PostController extends Controller
@@ -78,6 +79,17 @@ class PostController extends Controller
 
         $new_post_data['slug'] = $new_slug;
 
+        // se c'è ed è settete un'immagine:
+        if(isset($new_post_data['cover-img'])){
+
+            $new_img_path=Storage::put('posts-cover', $new_post_data['cover-img']);
+
+            if($new_img_path){
+                $new_post_data['cover-img']= $new_img_path;
+            }
+
+        }
+
         $new_post = new Post();
         $new_post->fill( $new_post_data);
         $new_post->save();
@@ -86,6 +98,8 @@ class PostController extends Controller
         if (isset($new_post_data['tags']) && is_array($new_post_data['tags'])){
             $new_post->tags()->sync($new_post_data['tags']);
         }
+
+
 
         return redirect()->route('admin.posts.show', ['post' => $new_post->id]);
         

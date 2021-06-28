@@ -14,7 +14,7 @@
             </div>
         @endif
         {{-- form --}}
-        <form action="{{route('admin.posts.store')}}" method="post">
+        <form action="{{route('admin.posts.store')}}" method="post" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <div class="form-group">
@@ -42,12 +42,16 @@
                 
                 @foreach ($tags as $tag)
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" name='tags[]' class="custom-control-input" value="{{$tag->id}}" id="tag-{{$tag->id}}" {{ in_array($tag->id, old('tags',)) ? 'checked' : '' }}>
+                    <input type="checkbox" name='tags[]' class="custom-control-input" value="{{$tag->id}}" id="tag-{{$tag->id}}" >
                     <label class="custom-control-label" for="tag-{{$tag->id}}">{{$tag->name}}</label>
                 </div>
                 @endforeach
             </div>
 
+            <div class="custom-file mt-2 mb-4">
+                <input type="file" class="custom-file-input" name='cover-img' id="cover-img">
+                <label class="custom-file-label" for="cover-img">Immagine di Copertna</label>
+            </div>
             <input type="submit" class="btn btn-success" value="Crea Post"> 
           </form>
         {{-- END FORM --}}

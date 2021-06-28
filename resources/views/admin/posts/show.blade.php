@@ -9,6 +9,11 @@
     
     <h1>{{ ucfirst( $post->title ) }}</h1>
 
+    <div class="mt-2 mb-2">
+        @if($post->cover)
+            <img src="{{ asset('storage/' . $post->cover_image) }}" alt='{{$post->title}}'>
+        @endif
+    </div>
     <div> <strong>Slug:</strong> {{ $post->slug }}</div>
 
     <p>{{ $post->content }}</p>
